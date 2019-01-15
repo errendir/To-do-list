@@ -94,17 +94,14 @@ const reset = () => {
 
 //funkcja wyszukiwarki
 const search = (e) => {
-    let ul = e.target.parentElement.querySelector("ul");
-    let searchValue = e.target.value.toLowerCase();
-    let listLis = document.querySelectorAll('section.weekDays li');
-    let filtredLis = [...listLis].filter(el => el.innerText.includes(searchValue));
-    ul.textContent = "";
-    filtredLis.forEach(el => ul.appendChild(el));
+    let value = e.target.value;
+    const allLis = document.querySelectorAll('.allList li');
+    const allUl = document.querySelector('.allList ul');
+
+    let allListFilted = [...allLis].filter(el => el.textContent.includes(value));
+    allUl.textContent = "";
+    allListFilted.forEach(el => allUl.appendChild(el));
 };
-
-
-
-
 
 //gówna funkcja, dodająca event do list
 const addTask = () => {
