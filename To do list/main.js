@@ -49,12 +49,39 @@ const removeTasks = (e) => {
     fullListFiltered.forEach(el => el.remove());
 };
 
+let globalListOfTasks = []
+let globalFilter = ""
 
 //funkcja sprawdzająca do jakiego dnia dopisać zadanie i dodająca elementy (done i flame)
 const checkDay = (day, txt) => {
     let dayValue = daySelect.value;
+
+    globalListOfTasks.push({
+        dayValue,
+        txt
+    })
+    renderAllTasks()
+}
+
+const renderAllTasks = () => {
+    // Clear all tasks first
+    for (const div of daysDivs) {
+        div.lastElementChild.innerHTML = ""
+    }
+    const allUl = document.querySelector('.allList ul');
+    allUl.innerHTML = ""
+    importantTasks.lastElementChild.innerHTML = ""
+    // Now render all tasks that match the filter
+    for (const task of globalListOfTasks) {
+        if (task.txt.includes(globalFilter)) {
+            renderOneTask(task)
+        }
+    }
+}
+
+const renderOneTask = ({ dayValue, txt }) => {
     let dayDiv = [...daysDivs].filter(el => el.dataset.day === dayValue);
-    
+
     let newLi = document.createElement("li");
     counter++;
     newLi.dataset.number = counter;
@@ -94,13 +121,8 @@ const reset = () => {
 
 //funkcja wyszukiwarki
 const search = (e) => {
-    let value = e.target.value;
-    const allLis = document.querySelectorAll('.allList li');
-    const allUl = document.querySelector('.allList ul');
-
-    let allListFilted = [...allLis].filter(el => el.textContent.includes(value));
-    allUl.textContent = "";
-    allListFilted.forEach(el => allUl.appendChild(el));
+    globalFilter = e.target.value;
+    renderAllTasks()
 };
 
 //gówna funkcja, dodająca event do list
