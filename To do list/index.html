@@ -4,11 +4,105 @@
     <meta charset="UTF-8">
     <title>To do list</title>
     <link href="https://fonts.googleapis.com/css?family=Oswald:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+<div class="border">
+    <div class="container">
+        <header>
+            <div class="headline">
+                <h1>tygodniowa lista zadań</h1>
+                <p></p>
+                <div class="underline"></div>
+            </div>
+            <div class="tasks">
+                <h3>Dodaj do listy</h3>
+                <input type="text" class="tasksInput" placeholder="dodaj zadanie">
+                <label>Jak ważne jest to zadanie?</label>
+                <input type="range" min="1" max="4" name="rangeInput" class="rangeInput">
+                <div class="importanceImg"></div>
+                <label>Kiedy wykonasz to zadanie?</label>
+                <select>
+                    <option value="monday">Poniedziałek</option>
+                    <option value="tuesday">Wtorek</option>
+                    <option value="wednesday">Środa</option>
+                    <option value="thursday">Czwartek</option>
+                    <option value="friday">Piątek</option>
+                    <option value="saturday">Sobota</option>
+                    <option value="sunday">Niedziela</option>
+                </select>
+                <button class="addTask">dodaj zadanie</button>
+            </div>
+            <div class="underline"></div>
+        </header>
+
+        <section class="weekDays">
+            <div class="day" data-day="monday">
+                <h3>Poniedziałek</h3>
+                <div class="underline"></div>
+                <ul></ul>
+            </div>
+            <div class="day" data-day="tuesday">
+                <h3>Wtorek</h3>
+                <div class="underline"></div>
+                <ul></ul>
+            </div>
+            <div class="day" data-day="wednesday">
+                <h3>Środa</h3>
+                <div class="underline"></div>
+                <ul></ul>
+            </div>
+            <div class="day" data-day="thursday">
+                <h3>Czwartek</h3>
+                <div class="underline"></div>
+                <ul></ul>
+            </div>
+            <div class="day" data-day="friday">
+                <h3>Piątek</h3>
+                <div class="underline"></div>
+                <ul></ul>
+            </div>
+            <div class="day" data-day="saturday">
+                <h3>Sobota</h3>
+                <div class="underline"></div>
+                <ul></ul>
+            </div>
+            <div class="day" data-day="sunday">
+                <h3>Niedziela</h3>
+                <div class="underline"></div>
+                <ul></ul>
+            </div>
+        </section>
+
+        <div class="underline"></div>
+
+        <section class="mainSection">
+            <div class="leftSide">
+                <div class="importantTasks">
+                    <h3>Najważniejsze</h3>
+                    <div class="underline"></div>
+                    <ul></ul>
+                </div>
+                <div class="notes">
+                    <h3>Notatki</h3>
+                    <div class="underline"></div>
+                    <textarea name="notes" cols="30" rows="10" class="notesTxt" placeholder="notatki"></textarea>
+                </div>
+
+            </div>
+            <div class="allList">
+                <h3>Pełna lista</h3>
+                <label>Wyszukiwarka: </label>
+                <input type="text" placeholder="szukaj">
+                <div class="underline"></div>
+                <ul></ul>
+            </div>
 
 
+        </section>
+    </div>
+</div>
 <script src="main.js"></script>
 </body>
 </html>
