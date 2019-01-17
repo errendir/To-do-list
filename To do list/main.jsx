@@ -40,13 +40,9 @@ const checkRange = () => {
 };
 
 //funkcja usuwająca elementy z listy
-const removeTasks = (e) => {
-    e.target.parentElement.remove();
-    let lis = document.querySelectorAll('.mainSection li');
-    let daysLis = document.querySelectorAll('.weekDays li');
-    let fullList = [...lis].concat([...daysLis]);
-    let fullListFiltered = fullList.filter(el => el.dataset.number == e.target.parentElement.dataset.number);
-    fullListFiltered.forEach(el => el.remove());
+const removeTasks = (taskToRemove) => {
+    globalListOfTasks = globalListOfTasks.filter(task => task !== taskToRemove)
+    renderAllTasks()
 };
 
 let globalListOfTasks = []
@@ -78,37 +74,56 @@ const renderAllTasks = () => {
     }
 }
 
-const renderOneTask = ({ dayValue, priority, txt }) => {
-    let dayDiv = [...daysDivs].filter(el => el.dataset.day === dayValue);
+const renderOneTask = (task) => {
+    let dayDiv = [...daysDivs].find(el => el.dataset.day === task.dayValue);
 
-    let newLi = document.createElement("li");
-    counter++;
-    newLi.dataset.number = counter;
-    let newI = document.createElement("i");
-    newLi.innerHTML = txt;
-    newI.classList.add("fas");
-    newI.classList.add("fa-check");
-    newLi.appendChild(newI);
-
-
-    let newLiCopy = newLi.cloneNode(true);
-    let newLiCopy2 = newLi.cloneNode(true);
-    let importanceImgCopy = importanceImg.cloneNode(true);
-    importanceImgCopy.style.backgroundImage = "url('./img/flame.png')";
-    importanceImgCopy.style.marginLeft = "2rem";
-
-    dayDiv.forEach(el => el.lastElementChild.appendChild(newLi));
-    allList.lastElementChild.appendChild(newLiCopy);
-    if (priority == 4) {
-        importantTasks.lastElementChild.appendChild(newLiCopy2);
-        newLiCopy2.appendChild(importanceImgCopy);
+    // Very hacky solution that allows us to slowly migrate to React
+    const appendReactTo = (element, target) => {
+        const frag = document.createDocumentFragment()
+        ReactDOM.render(element, frag)
+        target.appendChild(frag)
     }
 
-    //usunięcie elementu
-    newI.addEventListener("click", removeTasks);
-    newLiCopy.addEventListener("click", removeTasks);
-    newLiCopy2.addEventListener("click", removeTasks);
+    // Render the Task in the all list
+    appendReactTo(
+        <Task task={task} />,
+        allList.lastElementChild
+    )
+
+    // Render the Task in the correct day box
+    dayDiv && appendReactTo(
+        <Task task={task} />,
+        dayDiv.lastElementChild
+    )
+
+    // If the Task is high priority render it in the high priority box
+    if (task.priority == 4) {
+        appendReactTo(
+            <Task task={task} presentAsImportant />,
+            importantTasks.lastElementChild
+        )
+    }
 };
+
+class Task extends React.Component {
+    checkmark = React.createRef()
+    componentDidMount() {
+        // Due to how weirdly we use React, normal way of handling events doesn't work
+        this.checkmark.current.addEventListener("click", this.removeTasks)
+    }
+    removeTasks = () => {
+        removeTasks(this.props.task)
+    }
+    render() {
+        return <li>
+            {this.props.task.txt}
+            <i className="fas fa-check" ref={this.checkmark} />
+            { this.props.presentAsImportant &&
+                <div style={{ backgroundImage: "url('./img/flame.png')", marginLeft: "2rem" }} />
+            }
+        </li>
+    }
+}
 
 //funkcja resetu po dodaniu zadania
 const reset = () => {
