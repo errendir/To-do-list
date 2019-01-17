@@ -53,11 +53,10 @@ let globalListOfTasks = []
 let globalFilter = ""
 
 //funkcja sprawdzająca do jakiego dnia dopisać zadanie i dodająca elementy (done i flame)
-const checkDay = (day, txt) => {
-    let dayValue = daySelect.value;
-
+const checkDay = (day, priority, txt) => {
     globalListOfTasks.push({
-        dayValue,
+        dayValue: day,
+        priority,
         txt
     })
     renderAllTasks()
@@ -79,7 +78,7 @@ const renderAllTasks = () => {
     }
 }
 
-const renderOneTask = ({ dayValue, txt }) => {
+const renderOneTask = ({ dayValue, priority, txt }) => {
     let dayDiv = [...daysDivs].filter(el => el.dataset.day === dayValue);
 
     let newLi = document.createElement("li");
@@ -100,7 +99,7 @@ const renderOneTask = ({ dayValue, txt }) => {
 
     dayDiv.forEach(el => el.lastElementChild.appendChild(newLi));
     allList.lastElementChild.appendChild(newLiCopy);
-    if (rangeInput.value == 4) {
+    if (priority == 4) {
         importantTasks.lastElementChild.appendChild(newLiCopy2);
         newLiCopy2.appendChild(importanceImgCopy);
     }
@@ -132,7 +131,8 @@ const addTask = () => {
         return alert("puste pole")
     }
     let dayValue = daySelect.value;
-    checkDay(dayValue, taskValue);
+    let priority = rangeInput.value;
+    checkDay(dayValue, priority, taskValue);
     reset();
 };
 
