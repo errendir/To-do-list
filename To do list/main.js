@@ -53,36 +53,46 @@ const removeTasks = (e) => {
 //funkcja sprawdzająca do jakiego dnia dopisać zadanie i dodająca elementy (done i flame)
 const checkDay = (day, txt) => {
     let dayValue = daySelect.value;
-    let dayDiv = [...daysDivs].filter(el => el.dataset.day === dayValue);
-    
-    let newLi = document.createElement("li");
+    let dayDiv = [...daysDivs].find(el => el.dataset.day === dayValue);
+    const priority = rangeInput.value
+
+    const newLi = createListItem(priority, txt)
+    const newLiCopy = createListItem(priority, txt)
+    const newLiCopy2 = createListItem(priority, txt, true)
+
+    if (dayDiv != undefined) {
+        dayDiv.lastElementChild.appendChild(newLi)
+    }
+    allList.lastElementChild.appendChild(newLiCopy);
+    if (priority == 4) {
+        importantTasks.lastElementChild.appendChild(newLiCopy2);
+    }
+};
+
+const createListItem = (priority, txt, showPriority) => {
+    let listItem = document.createElement("li");
     counter++;
-    newLi.dataset.number = counter;
+    listItem.dataset.number = counter;
     let newI = document.createElement("i");
-    newLi.innerHTML = txt;
+    listItem.innerHTML = txt;
     newI.classList.add("fas");
     newI.classList.add("fa-check");
-    newLi.appendChild(newI);
+    listItem.appendChild(newI);
 
 
-    let newLiCopy = newLi.cloneNode(true);
-    let newLiCopy2 = newLi.cloneNode(true);
     let importanceImgCopy = importanceImg.cloneNode(true);
     importanceImgCopy.style.backgroundImage = "url('./img/flame.png')";
     importanceImgCopy.style.marginLeft = "2rem";
 
-    dayDiv.forEach(el => el.lastElementChild.appendChild(newLi));
-    allList.lastElementChild.appendChild(newLiCopy);
-    if (rangeInput.value == 4) {
-        importantTasks.lastElementChild.appendChild(newLiCopy2);
-        newLiCopy2.appendChild(importanceImgCopy);
+    if (showPriority === true && priority == 4) {
+        listItem.appendChild(importanceImgCopy);
     }
 
     //usunięcie elementu
-    newI.addEventListener("click", removeTasks);
-    newLiCopy.addEventListener("click", removeTasks);
-    newLiCopy2.addEventListener("click", removeTasks);
-};
+    listItem.addEventListener("click", removeTasks);
+
+    return listItem
+}
 
 //funkcja resetu po dodaniu zadania
 const reset = () => {
